@@ -1,7 +1,10 @@
 import torch
 from diffusers import StableDiffusionPipeline
 
-model_id = "ogkalu/Comic-Diffusion"
+# model_id = "ogkalu/Comic-Diffusion"
+# model_id = "../models/my_diffuser"
+MODEL_DIR = "/home/overlordx/PycharmProjects/imagine/models"
+model_id = "my_diffuser"
 
 # Comic Diffusion was trained to use the following artstyles
 # charliebo artstyle
@@ -18,7 +21,7 @@ model_id = "ogkalu/Comic-Diffusion"
 device = "cpu"
 
 # pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
-pipe = StableDiffusionPipeline.from_pretrained(model_id)
+pipe = StableDiffusionPipeline.from_pretrained(model_id, cache_dir=MODEL_DIR)
 pipe.safety_checker = lambda images, clip_input: (images, False)
 pipe = pipe.to(device)
 generator = torch.Generator(device).manual_seed(0)
@@ -34,9 +37,10 @@ bar_3 = "a beautiful megan fox with perfect face crowded with people uptown bar 
 ukraine_1 = "map of ukraine showing red in the areas of russian invasion and yellow showing areas of ukraine resistance, kyiv marked on the map, , –s 625 –q 2 –iw 3"
 jazz_2 = "portrait of A  Beautiful WOMAN=Nikole Kidman: 50 AND Megan Fox: 50, street corner, new orleans, burbon street, mardi gras, holliemengert artstyle: 10, Detail ultrarealistic: 50"
 demo_comic_1 = "f7u12 rage comic about CIA conspiracies"
-prompt = "f7u12 rage comic single cell a beautiful woman, megan fox, anya taylor-joy, gal gadot, moody atmosphere, sunrise in the distance, "
-prompt += " 50mm portrait photography, hard rim lighting photography--beta --ar 2:3  --beta --upbeta"
+prompt = "realistic photograph of a real Goddess Aphrodite wearing a dress in the style of Domenico Dolce and Stefano Gabbana, seductive mood, photographic quality, "
+prompt += " futuristic, bladerunner, style George Lucas, speculative fiction film, "
+prompt += " 24mm portrait photography, hard rim lighting photography--beta --ar 2:3  --beta --upbeta"
 
-image = pipe(prompt, generator=generator, num_inference_steps=10).images[0]
+image = pipe(prompt, generator=generator, num_inference_steps=75).images[0]
 
-image.save("../data/comic/sunrise_2.png")
+image.save("../data/comic/future_1.png")
