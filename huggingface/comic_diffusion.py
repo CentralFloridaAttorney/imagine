@@ -1,10 +1,10 @@
 import torch
 from diffusers import StableDiffusionPipeline
 
-# model_id = "ogkalu/Comic-Diffusion"
+model_id = "ogkalu/Comic-Diffusion"
 # model_id = "../models/my_diffuser"
 MODEL_DIR = "/home/overlordx/PycharmProjects/imagine/models"
-model_id = "my_diffuser"
+# model_id = "my_diffuser"
 
 # Comic Diffusion was trained to use the following artstyles
 # charliebo artstyle

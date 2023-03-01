@@ -1,10 +1,13 @@
 import pandas
 import torch
 from diffusers import StableDiffusionPipeline
+model_id = "CompVis/stable-diffusion-v1-4"
 
+# model_id = "../models/my_diffuser"
+CACHE_DIR = "/home/overlordx/PycharmProjects/imagine/models"
 # model_id = "CompVis/stable-diffusion-v1-4"
 # model_id = "../models/models--CompVis--stable-diffusion-v1-4/snapshots/3857c45b7d4e78b3ba0f39d4d7f50a2a05aa23d4/model_index.json"
-model_id = "../models/imagine_model/"
+# model_id = "../models/imagine_model/"
 # device = "cuda"
 device = "cpu"
 styles = pandas.read_csv("../data/txt/artist_styles")
@@ -12,7 +15,7 @@ num_rows = len(styles)
 # pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
 
 
-pipe = StableDiffusionPipeline.from_pretrained(model_id)
+pipe = StableDiffusionPipeline.from_pretrained(model_id, cache_dir=CACHE_DIR)
 pipe.safety_checker = lambda images, clip_input: (images, False)
 pipe = pipe.to(device)
 
@@ -31,7 +34,7 @@ for row in range (8, num_rows-1, 1):
     row_value = styles.iloc[row]
     constructed_prompt = constructed_prompt + " " + row_value
     image = pipe(constructed_prompt, height=64, width=64).images[0]
-    image.save("man_woman_style_" + str(row) + ".png")
+    # image.save("man_woman_style_" + str(row) + ".png")
     image.save("../data/man_woman/man_woman_" + str(row) + ".png")
 
 

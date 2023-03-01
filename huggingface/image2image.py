@@ -14,14 +14,15 @@ pipe = pipe.to(device)
 
 #response = requests.get(url)
 # image_file = iio.read('../data/comic/human_queen_1.png')
-init_image = Image.open('../data/paintings/painting_1.png').convert("RGB")
+init_image = Image.open('../data/jpeg/waterskin.jpeg').convert("RGB")
 
 
 init_image.thumbnail([512, 512])
 
-prompt = "A realistic photograph of a crowded Manhattan Park"
-
-images = pipe(prompt=prompt, image=init_image, strength=.6, guidance_scale=10.5).images
+prompt = "a leather pouch on a wooden table, bokeh, photography –s 625 –q 2 –iw"
+gandalf_prompt = "ultrarealistic, (old Bilbo Baggins with evil eyes, Lord of the Rings), dramatic lighting, award winning photo, no color, 80mm lense –beta –upbeta –upbeta"
 pipe.safety_checker = lambda images, clip_input: (images, False)
 
-images[0].save("../data/paintings/painting_1a.png")
+images = pipe(prompt=prompt, image=init_image, strength=.6, guidance_scale=10.5).images
+
+images[0].save('../data/jpeg/waterskin_new.png')
