@@ -1,9 +1,9 @@
 import pandas
 import torch
 from diffusers import StableDiffusionPipeline
-LAST_INDEX = 281
-INFERENCE_STEPS = 20
-PROMPT_STRENGTH = 10.0
+LAST_INDEX = 300
+INFERENCE_STEPS = 25
+PROMPT_STRENGTH = 12.0
 BASE_PROMPT = "a battle between good and evil, religion, RAW photo, *subject*, (high detailed skin:1.2), 8k uhd, dslr, soft lighting, high quality, film grain, Fujifilm XT3, "
 # BASE_PROMPT = "A realistic image of 2 people in love, mood cheerful,"
 # BASE_PROMPT = "A realistic image of a man and woman in love, mood cheerful,"

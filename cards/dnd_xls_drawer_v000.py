@@ -5,7 +5,7 @@ import pandas
 import torch
 from diffusers import StableDiffusionPipeline
 
-GENERATOR = torch.Generator(device="cpu").manual_seed(345)
+GENERATOR = torch.Generator(device="cpu").manual_seed(1096)
 styles = pandas.read_csv("../data/txt/artist_styles")
 styles = styles.fillna("professional")
 rnd_style = random.randint(0, len(styles))
@@ -23,9 +23,9 @@ COLLECTION_NAME = "dnd/equipment/test"
 # STYLE_LIST = [412, 427, 439, 444, 452, 468, 483, 499]
 # STYLE_LIST = [516, 529, 537, 541, 559, 563, 571, 583, 591]   # indices for styles to be used
 # STYLE_ROW = 8
-LAST_INDEX = 2
-INFERENCE_STEPS = 20
-PROMPT_STRENGTH = 14.0
+LAST_INDEX = 0
+INFERENCE_STEPS = 50
+PROMPT_STRENGTH = 10.0
 HEIGHT = 536
 WIDTH = 688
 data_file = pandas.read_excel(BASE_DIR+"xls/equipment_data.xls")
