@@ -1,8 +1,8 @@
 from configparser import ConfigParser
 
-DEFAULT_INI_FILE_PATH = '../../data/ini/configtool_default.ini'
+DEFAULT_INI_FILE_PATH = './configtool_default.ini'
 DEFAULT_INI = {
-            "ini_file_path": "../../default.ini",
+            "ini_file_path": "./configtool_default.ini",
             "user": "bilbo",
             "passwd": "baggins",
             "port": "3306",
@@ -21,7 +21,7 @@ class ConfigTool:
         print('__init__ done!')
 
     def write_default_configs(self):
-        file_path = '../../' + self.config_key + '.ini'
+        file_path = './' + self.config_key + '.ini'
         #Get the configparser object
         config_object = ConfigParser()
         #Assume we need 2 sections in the config file, let's call them USERINFO and SERVERCONFIG
@@ -34,7 +34,7 @@ class ConfigTool:
             config_object.write(conf)
 
     def get_configs(self):
-        file_path = '../../' + self.config_key + '.ini'
+        file_path = './' + self.config_key + '.ini'
         config_object = ConfigParser()
         config_object.read(file_path)
         return config_object.defaults()
