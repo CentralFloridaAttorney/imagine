@@ -74,7 +74,7 @@ class CardMakerGUI:
 
 
     def make_card(self):
-        card_image = self.card_maker.make_card()
+        card_image = self.card_maker.get_card()
         print("make_card done!")
     def open_image(self):
         file_path = filedialog.askopenfilename(filetypes=[('image files', '.png')], initialdir=BASE_DIR)
