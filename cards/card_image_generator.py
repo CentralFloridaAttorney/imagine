@@ -17,6 +17,7 @@ class CardImageGenerator:
         self.styles = self.styles.fillna("professional")
         self.rnd_style = random.randint(0, len(self.styles))
         model_id = "CompVis/stable-diffusion-v1-4"
+        # model_id = "volrath50/fantasy-card-diffusion"
         device = "cpu"
         self.pipe = StableDiffusionPipeline.from_pretrained(model_id)
         self.pipe.safety_checker = lambda images, clip_input: (images, False)

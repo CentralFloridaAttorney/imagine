@@ -3,13 +3,13 @@ import re
 
 from transformers import pipeline, set_seed
 
-
 gpt2_pipe = pipeline('text-generation', model='Gustavosta/MagicPrompt-Stable-Diffusion', tokenizer='gpt2')
-with open("ideas.txt", "r") as f:
+with open("../data/txt/ideas.txt", "r") as f:
     line = f.readlines()
 
 
 def generate(starting_text):
+    starting_text = starting_text.replace("\n", " ")
     seed = random.randint(100, 1000000)
     set_seed(seed)
 
@@ -24,18 +24,12 @@ def generate(starting_text):
         if resp != starting_text and len(resp) > (len(starting_text) + 4) and resp.endswith((":", "-", "—")) is False:
             response_list.append(resp+'\n')
 
-    response_end = "\n".join(response_list)
-    response_end = re.sub('[^ ]+\.[^ ]+','', response_end)
-    response_end = response_end.replace("<", "").replace(">", "")
+    return response_list
 
-    if response_end != "":
-        return response_end
 
-response = generate("cloth armor folded on a table")
 
 examples = []
 for x in range(8):
     examples.append(line[random.randrange(0, len(line))].replace("\n", "").lower().capitalize())
 
-title = "Stable Diffusion Prompt Generator"
-description = 'This is a demo of the model series: "MagicPrompt", in this case, aimed at: "Stable Diffusion". To use it, simply submit your text or click on one of the examples. To learn more about the model, [click here](https://huggingface.co/Gustavosta/MagicPrompt-Stable-Diffusion).<br>'
+print("done!")

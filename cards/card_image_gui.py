@@ -4,18 +4,22 @@ from tkinter import filedialog, Label, Entry, Menu, Text, Button, END
 
 import pandas
 from PIL import Image, ImageFont, ImageDraw, ImageTk
+from transformers import pipeline
 
+from cards import card_image_prompt_generator
 from cards.card_image_generator import CardImageGenerator
 
 # BASE_DIR = "../"
-PROJECT_DIR = "data/dnd/coins/"
+PROJECT_DIR = "data/dnd/"
 DEFAULT_XLS = "../data/xls/coin_data.xls"
 COIN_DATA = pandas.read_excel("../data/xls/coin_data.xls")
 DEFAULT_IMAGE = "../data/dnd/coins/cp/copper-1_536_688_1827.png"
-COLLECTION_NAME = "dnd/coins/"
+COLLECTION_NAME = "dnd/"
+FONT_TYPE = ImageFont.truetype("../data/ttf/arial.ttf", 24)
 
 class CoinCardMakerGUI:
     def __init__(self, master):
+        # self.prompt_generator = PromptGenerator()
         self.coin_photo = None
         self.card_maker = None
         self.master = master
@@ -40,9 +44,10 @@ class CoinCardMakerGUI:
         self.load_xls_btn.grid(row=2, column=0, rowspan=1, padx=5, pady=5)
         self.generate_image_btn = Button(self.master, text="Generate Image", command=self.generate_image)
         self.generate_image_btn.grid(row=2, column=1, rowspan=1, padx=5, pady=5)
-        self.copy_last_card_btn = Button(self.master, text="Duplicate Last", command=self.new_card)
+        self.copy_last_card_btn = Button(self.master, text="Copy Current", command=self.new_card)
         self.copy_last_card_btn.grid(row=2, column=2, rowspan=1, padx=5, pady=5)
-
+        self.generate_prompts_btn = Button(self.master, text="Generate Prompt", command=self.open_prompts_window)
+        self.generate_prompts_btn.grid(row=2, column=3, rowspan=1, padx=5, pady=5)
         # Data Fields
         iterations_label = tk.Label(self.master, text="Iterations: ")
         iterations_label.grid(row=4, column=0, rowspan=1, padx=5, pady=5)
@@ -57,10 +62,10 @@ class CoinCardMakerGUI:
         file_name_label.grid(row=6, column=0, rowspan=1, padx=5, pady=5)
         self.file_name = Entry(self.master)
         self.file_name.grid(row=6, column=1, rowspan=1, padx=5, pady=5)
-        type_label = tk.Label(self.master, text="Type: ")
-        type_label.grid(row=7, column=0, rowspan=1, padx=5, pady=5)
-        self.type = Entry(self.master)
-        self.type.grid(row=7, column=1, rowspan=1, padx=5, pady=5)
+        collection_name_label = tk.Label(self.master, text="Collection Name: ")
+        collection_name_label.grid(row=7, column=0, rowspan=1, padx=5, pady=5)
+        self.collection_name = Entry(self.master)
+        self.collection_name.grid(row=7, column=1, rowspan=1, padx=5, pady=5)
         quantity_label = tk.Label(self.master, text="Quantity: ")
         quantity_label.grid(row=8, column=0, rowspan=1, padx=5, pady=5)
         self.quantity = Entry(self.master)
@@ -91,19 +96,19 @@ class CoinCardMakerGUI:
 
         description_label = tk.Label(self.master, text="Description: ")
         description_label.grid(row=1, column=6, rowspan=1, padx=5, pady=5)
-        self.description = Text(self.master, height=2)
-        self.description.grid(row=2, column=6, rowspan=2, padx=5, pady=5)
+        self.description = Text(self.master, height=10)
+        self.description.grid(row=2, column=6, rowspan=10, padx=5, pady=5)
 
         prompt_label = tk.Label(self.master, text="Prompt: ")
-        prompt_label.grid(row=4, column=6, rowspan=1, padx=5, pady=5)
-        self.prompt = Text(self.master, height=2)
-        self.prompt.grid(row=5, column=6, rowspan=2, padx=5, pady=5)
+        prompt_label.grid(row=4, column=8, rowspan=1, padx=5, pady=5)
+        self.prompt = Text(self.master, height=10)
+        self.prompt.grid(row=12, column=6, rowspan=10, padx=5, pady=5)
 
         # coin image
         self.img = Image.open(DEFAULT_IMAGE)
         self.coin_photo = ImageTk.PhotoImage(self.img)
         self.coin_image_panel = Label(master, image=self.coin_photo)
-        self.coin_image_panel.grid(row=7, column=6, rowspan=100, padx=5, pady=5)
+        self.coin_image_panel.grid(row=22, column=6, rowspan=100, padx=5, pady=5)
 
         # card image
         # self.card_img = self.make_card()
@@ -113,6 +118,31 @@ class CoinCardMakerGUI:
         self.master.bind('<Return>', self.update_xls)
         self.update_data_gui()
 
+    def open_prompts_window(self):
+
+        # Toplevel object which will
+        # be treated as a new window
+        new_window = tk.Toplevel(self.master)
+        current_prompt = self.prompt.get("1.0", END)
+        prompt_list = card_image_prompt_generator.generate(current_prompt)
+        prompt_string = ""
+        for row in range(0, len(prompt_list), 1):
+            prompt_string += prompt_list[row] + " *** "
+
+        revised_prompt_label = Text(new_window, font=('Helvetica bold',40))
+        revised_prompt_label.insert("1.0", prompt_string)
+        revised_prompt_label.pack()
+        # revised_prompt_label.pack()
+        # sets the geometry of toplevel
+
+        # card_img = self.get_card_image()
+        # card_image_path = self.image_file_path["text"].replace(".png", "_card.png")
+        # card_img.save(card_image_path)
+        # card_photo = ImageTk.PhotoImage(card_img)
+        # card_image_panel = Label(new_window, image=card_photo)
+        # card_image_panel.pack()
+
+        new_window.mainloop()
 
     # function to open a new window
     # on a button click
@@ -152,7 +182,8 @@ class CoinCardMakerGUI:
         new_window.mainloop()
 
     def new_card(self):
-        data_frame = self.COIN_DATA.loc[(len(self.COIN_DATA) - 1)]
+        current_row = int(self.index.get())
+        data_frame = self.COIN_DATA.loc[current_row]
         new_row = data_frame.copy().transpose()
 
         # Insert Dict to the dataframe using DataFrame.append()
@@ -163,7 +194,7 @@ class CoinCardMakerGUI:
         print("new_card done!")
 
     def generate_image(self):
-        collection_name = COLLECTION_NAME + str(self.type.get())
+        collection_name = COLLECTION_NAME + str(self.collection_name.get())
         image_prompt = self.prompt.get("1.0", END) + ", bokeh, photography –s 625 –q 2 –iw"
         item_image_generator = CardImageGenerator(
             _prompt=image_prompt,
@@ -191,8 +222,8 @@ class CoinCardMakerGUI:
         self.name.insert(0, self.COIN_DATA.iloc[int(self.index.get()), 0])
         self.file_name.delete(0, END)
         self.file_name.insert(0, self.COIN_DATA.iloc[int(self.index.get()), 1])
-        self.type.delete(0, END)
-        self.type.insert(0, self.COIN_DATA.iloc[int(self.index.get()), 2])
+        self.collection_name.delete(0, END)
+        self.collection_name.insert(0, self.COIN_DATA.iloc[int(self.index.get()), 2])
         self.quantity.delete(0, END)
         self.quantity.insert(0, self.COIN_DATA.iloc[int(self.index.get()), 3])
         self.description.delete('1.0', END)
@@ -227,7 +258,7 @@ class CoinCardMakerGUI:
     def update_coin_data(self):
         self.COIN_DATA.iloc[int(self.index.get()), 0] = str(self.name.get())
         self.COIN_DATA.iloc[int(self.index.get()), 1] = str(self.file_name.get())
-        self.COIN_DATA.iloc[int(self.index.get()), 2] = str(self.type.get())
+        self.COIN_DATA.iloc[int(self.index.get()), 2] = str(self.collection_name.get())
         self.COIN_DATA.iloc[int(self.index.get()), 3] = str(self.quantity.get())
         self.COIN_DATA.iloc[int(self.index.get()), 4] = str(self.description.get("1.0", END).replace("\n", ""))
         self.COIN_DATA.iloc[int(self.index.get()), 5] = str(self.equivalents.get())
@@ -244,7 +275,7 @@ class CoinCardMakerGUI:
     def get_card_image(self):
         card_maker = Cardmaker(_image_file_path=self.image_file_path["text"],
                                _name=self.name.get(),
-                               _type=self.type.get(),
+                               _type=self.collection_name.get(),
                                _quantity=self.quantity.get(),
                                _equivalents=self.equivalents.get(),
                                _description=self.description.get("1.0", END),
@@ -336,17 +367,16 @@ class Cardmaker:
     def get_card(self):
         self.background.paste(self.item_image, (31, 36), mask=self.item_image)
         import textwrap
-        font_type = ImageFont.truetype("../data/ttf/arial.ttf", 24)
         foreground = (0, 0, 0, 255)
         draw = ImageDraw.Draw(self.background)
-        draw.text((34, 5), self.name, font=font_type, fill=foreground)
-        draw.text((46, 970), "Equivalents: " + self.equivalents, font=font_type, fill=foreground)
+        draw.text((34, 5), self.name, font=FONT_TYPE, fill=foreground)
+        draw.text((46, 970), "Equivalents: " + self.equivalents, font=FONT_TYPE, fill=foreground)
         novo = textwrap.wrap(self.description, width=64)
         for row in range(0, len(novo), 1):
             y_position = 650 + (36 * row)
             # font = ImageFont.load_default()
 
-            draw.text((46, y_position), novo[row], font=font_type, fill=foreground)
+            draw.text((46, y_position), novo[row], font=FONT_TYPE, fill=foreground)
         # Displaying the image
         self.background.save(self.card_file_path)
         print("make_card done!")
