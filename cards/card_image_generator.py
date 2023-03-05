@@ -3,11 +3,12 @@ import random
 
 import pandas
 import torch
+from PIL import ImageTk
 from diffusers import StableDiffusionPipeline
-
+import tkinter as tk
 
 class CardImageGenerator:
-    def __init__(self, _prompt="A copper coin.", _collection_name="dnd/coins/cp", _file_name="copper-1", _height=536, _width=688, _prompt_strength=10.0):
+    def __init__(self, _prompt="A copper coin.", _collection_name="dnd/coins/cp", _file_name="copper-1", _height=536, _width=688, _prompt_strength=.8):
         self.BASE_DIR = "../data/"
         self.COLLECTION_NAME = _collection_name
         self.PROMPT = _prompt
@@ -35,7 +36,7 @@ class CardImageGenerator:
         self.HEIGHT = _height
         self.WIDTH = _width
         self.file_directory = self.BASE_DIR + self.COLLECTION_NAME
-        self.file_path =  self.file_directory + "/" + self.file_name + "_" + str(self.HEIGHT) + "_" + str(self.WIDTH) + "_" + str(self.rnd_style) + ".png"
+        self.file_path = self.file_directory + "/" + self.file_name + "_" + str(self.HEIGHT) + "_" + str(self.WIDTH) + "_" + str(self.rnd_style) + ".png"
 
     def get_image(self, _seed=1000, _style=1002, _iterations=1):
         this_style = ", style "+self.styles.iloc[_style, 0]+":"+str(self.PROMPT_STRENGTH)
@@ -46,3 +47,26 @@ class CardImageGenerator:
         image.save(self.file_path)
         print("card_image_generator saved image: " + self.file_path)
         return self.file_path
+
+    def open_generator_window(self, _tk_root):
+
+        # Toplevel object which will
+        # be treated as a new window
+        new_window = tk.Toplevel(_tk_root)
+
+        # sets the title of the
+        # Toplevel widget
+        new_window.title("Image Generator")
+
+        # sets the geometry of toplevel
+
+        # card_img = self.get_card()
+        # card_image_path = self.card_file_path.replace(".png", "_card.png")
+        # card_img.save(card_image_path)
+        # card_photo = ImageTk.PhotoImage(card_img)
+        # card_image_panel = tk.Label(new_window, image=card_photo)
+        # card_image_panel.pack()
+        generator_btn = tk.Button(new_window, text='Generate Image', command=self.get_image(_iterations=25))
+        generator_btn.pack
+        new_window.mainloop()
+
