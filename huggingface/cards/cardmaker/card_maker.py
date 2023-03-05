@@ -4,8 +4,8 @@ from tkinter import Label
 
 from PIL import ImageFont, ImageDraw, Image, ImageTk
 
-DEFAULT_IMAGE_PATH = "../data/png/536_688_563.png"
-FONT_TYPE = ImageFont.truetype("../data/ttf/arial.ttf", 24)
+DEFAULT_IMAGE_PATH = "../../../data/png/536_688_563.png"
+FONT_TYPE = ImageFont.truetype("../../../data/ttf/arial.ttf", 24)
 
 
 class Cardmaker:

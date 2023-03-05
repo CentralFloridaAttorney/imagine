@@ -1,8 +1,11 @@
+import configparser
 from configparser import ConfigParser
 
-DEFAULT_INI_FILE_PATH = './configtool_default.ini'
+DEFAULT_INI_FILE_PATH = './xyzzy.ini'
 DEFAULT_INI = {
             "ini_file_path": "./configtool_default.ini",
+            "token_width": "600",
+            "token_height": "600",
             "user": "bilbo",
             "passwd": "baggins",
             "port": "3306",
@@ -16,16 +19,30 @@ DEFAULT_INI = {
 
 
 class ConfigTool:
-    def __init__(self, _config_key):
+    def __init__(self, _config_key="xyzzy"):
         self.config_key = _config_key
+        try:
+            configs = self.get_configs()
+        except FileNotFoundError:
+            self.write_default_configs(_config_key)
+            print("try again")
+        if configs == {}:
+            these_configs = DEFAULT_INI.copy()
+            these_configs["user"] = _config_key
+            parser = configparser.ConfigParser()
+            parser.read_dict(these_configs)
+            # self.write_default_configs(_config_key)
+            configs = self.get_configs()
+            print("done!")
+
         print('__init__ done!')
 
-    def write_default_configs(self):
-        file_path = './' + self.config_key + '.ini'
+    def write_default_configs(self, _config_key="xyzzy"):
+        file_path = './' + _config_key + '.ini'
         #Get the configparser object
         config_object = ConfigParser()
         #Assume we need 2 sections in the config file, let's call them USERINFO and SERVERCONFIG
-        config_object["DEFAULT"]["user"] = self.config_key
+        config_object["DEFAULT"]["user"] = _config_key
         config_object["DEFAULT"]["INI_FILE_PATH"] = file_path
         config_object["DEFAULT"] = DEFAULT_INI
 
@@ -63,7 +80,7 @@ def test_get_values(_user):
 
 
 if __name__ == '__main__':
-    _user = 'default'
+    _user = 'xyzzy!'
     test_init(_user)
     test_write_default_configs(_user)
     test_get_configs(_user)

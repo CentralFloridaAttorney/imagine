@@ -2,24 +2,25 @@ import tkinter as tk
 from tkinter import filedialog, Label, Entry, Menu, Text, Button, END
 
 import pandas
-from PIL import Image, ImageFont, ImageTk
+# from PIL import Image, ImageFont, ImageTk
 
-from cards import card_image_prompt_generator
-from cards.card_image_generator import CardImageGenerator
-from cards.cardmaker.card_maker import Cardmaker, TokenMaker
+from huggingface.cards import card_image_prompt_generator
+from huggingface.cards.card_image_generator import CardImageGenerator
+from huggingface.cards.cardmaker.card_maker import TokenMaker, Cardmaker
 
 # BASE_DIR = "../"
-PROJECT_DIR = "data/dnd/"
-DEFAULT_XLS = "../data/xls/coin_data.xls"
-COIN_DATA = pandas.read_excel("../data/xls/coin_data.xls")
+PROJECT_DIR = "../../../data/"
+# COIN_DATA = pandas.read_excel("../data/xls/coin_data.xls")
 DEFAULT_IMAGE = "../data/dnd/coins/cp/copper-1_536_688_1827.png"
 COLLECTION_NAME = "dnd/"
-FONT_TYPE = ImageFont.truetype("../data/ttf/arial.ttf", 24)
+# FONT_TYPE = ImageFont.truetype("../data/ttf/arial.ttf", 24)
 
 
 class CardMakerGUI:
     def __init__(self, master):
         # self.prompt_generator = PromptGenerator()
+        self.xls_project_data = PROJECT_DIR + "xls/coin_data.xls"
+
         self.coin_photo = None
         self.card_maker = None
         self.master = master
@@ -101,15 +102,15 @@ class CardMakerGUI:
         self.description.grid(row=2, column=6, rowspan=10, padx=5, pady=5)
 
         prompt_label = tk.Label(self.master, text="Prompt: ")
-        prompt_label.grid(row=4, column=8, rowspan=1, padx=5, pady=5)
+        prompt_label.grid(row=4, column=9, rowspan=1, padx=5, pady=5)
         self.prompt = Text(self.master, height=10)
-        self.prompt.grid(row=12, column=6, rowspan=10, padx=5, pady=5)
+        self.prompt.grid(row=13, column=6, rowspan=10, padx=5, pady=5)
 
         # coin image
-        self.img = Image.open(DEFAULT_IMAGE)
-        self.coin_photo = ImageTk.PhotoImage(self.img)
+        self.img = tk.Image(DEFAULT_IMAGE)
+        self.coin_photo = tk.PhotoImage(self.img)
         self.coin_image_panel = Label(master, image=self.coin_photo)
-        self.coin_image_panel.grid(row=22, column=6, rowspan=100, padx=5, pady=5)
+        self.coin_image_panel.grid(row=23, column=6, rowspan=100, padx=5, pady=5)
 
         # card image
         # self.card_img = self.make_card()
@@ -129,6 +130,24 @@ class CardMakerGUI:
                                _output_file_path=self.card_file_path)
         token_maker.open_card_window(self.master)
 
+    def generate_image(self):
+
+        collection_name = COLLECTION_NAME + str(self.collection_name.get())
+        image_prompt = self.prompt.get("1.0", END) + ", bokeh, photography –s 625 –q 2 –iw"
+        item_image_generator = CardImageGenerator(
+            _prompt=image_prompt,
+            _collection_name=collection_name,
+            _file_name=self.file_name.get(), )
+        item_image_generator.open_generator_window(self.master)
+        # item_image_file_path = item_image_generator.get_image(_seed=415423, _style=123,_iterations=self.iterations.get())
+
+        # self.update_coin_image(item_image_file_path)
+        # self.update_card_image()
+
+        # self.ITEM_DATA.iloc[int(self.index.get()), 7] = item_image_file_path
+        # self.image_file_path["text"] = item_image_file_path
+        # self.save_xls()
+        # self.update_coin_image(item_image_file_path)
 
     def open_prompts_window(self):
 
@@ -166,8 +185,8 @@ class CardMakerGUI:
         new_window.title(str(self.name.get()))
 
         # sets the geometry of toplevel
-        img = Image.open(self.image_file_path["text"])
-        coin_photo = ImageTk.PhotoImage(img)
+        img = tk.Image.open(self.image_file_path["text"])
+        coin_photo = tk.ImageTk.PhotoImage(img)
         coin_image_panel = Label(new_window, image=coin_photo)
         coin_image_panel.image = coin_photo
         coin_image_panel.pack()
@@ -184,25 +203,6 @@ class CardMakerGUI:
 
         self.ITEM_DATA = df2
         print("new_card done!")
-
-    def generate_image(self):
-
-        collection_name = COLLECTION_NAME + str(self.collection_name.get())
-        image_prompt = self.prompt.get("1.0", END) + ", bokeh, photography –s 625 –q 2 –iw"
-        item_image_generator = CardImageGenerator(
-            _prompt=image_prompt,
-            _collection_name=collection_name,
-            _file_name=self.file_name.get(), )
-        item_image_generator.open_generator_window(self.master)
-        # item_image_file_path = item_image_generator.get_image(_seed=415423, _style=123,_iterations=self.iterations.get())
-
-        # self.update_coin_image(item_image_file_path)
-        # self.update_card_image()
-
-        # self.ITEM_DATA.iloc[int(self.index.get()), 7] = item_image_file_path
-        # self.image_file_path["text"] = item_image_file_path
-        # self.save_xls()
-        # self.update_coin_image(item_image_file_path)
 
     def update_image_gui(self):
         self.update_coin_image(self.image_file_path["text"])
@@ -258,10 +258,10 @@ class CardMakerGUI:
         self.save_xls()
 
     def load_xls(self):
-        return pandas.read_excel(DEFAULT_XLS)
+        return pandas.read_excel(self.xls_project_data)
 
     def save_xls(self):
-        self.ITEM_DATA.to_excel(DEFAULT_XLS, index=False)
+        self.ITEM_DATA.to_excel(self.xls_project_data, index=False)
 
     def get_card_image(self):
         card_maker = Cardmaker(_image_file_path=self.image_file_path["text"],
@@ -311,10 +311,14 @@ class CardMakerGUI:
         print("open_image done!")
 
     def update_coin_image(self, _image_path):
-        self.img = Image.open(_image_path)
-        self.coin_photo = ImageTk.PhotoImage(self.img)
-        self.coin_image_panel.configure(image=self.coin_photo)
-        self.coin_image_panel.image = self.coin_photo
+        try:
+            self.img = tk.Image.open(_image_path)
+            self.coin_photo = tk.PhotoImage(self.img)
+            self.coin_image_panel.configure(image=self.coin_photo)
+            self.coin_image_panel.image = self.coin_photo
+        except FileNotFoundError:
+            self.open_image()
+            self.update_image_gui()
 
     def update_card_image(self):
         # self.card_img = self.make_card()

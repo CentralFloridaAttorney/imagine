@@ -3,9 +3,12 @@ import re
 import tkinter as tk
 from transformers import pipeline, set_seed
 
-gpt2_pipe = pipeline('text-generation', model='Gustavosta/MagicPrompt-Stable-Diffusion', tokenizer='gpt2')
-with open("../data/txt/ideas.txt", "r") as f:
-    line = f.readlines()
+
+class PromptGenerator:
+    def __init__(self):
+        self.gpt2_pipe = pipeline('text-generation', model='Gustavosta/MagicPrompt-Stable-Diffusion', tokenizer='gpt2')
+        with open("../../data/txt/ideas.txt", "r") as f:
+            line = f.readlines()
 
 
 def generate(_starting_text="A large mound of dirt.", _tk_root=None):
@@ -40,3 +43,5 @@ for x in range(8):
     examples.append(line[random.randrange(0, len(line))].replace("\n", "").lower().capitalize())
 
 print("done!")
+
+

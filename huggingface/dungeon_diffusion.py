@@ -51,6 +51,8 @@ knight = "redshift style, painted portrait of a paladin, masculine, mature, hand
 bear = "anthropomorphic, half man half asian black bear, black bear samurai, Moon Bear Samurai, epic, samurai, stunning 3d render inspired art by Renato muccillo and Andreas Rocha and Johanna Rupprecht + symmetry + natural volumetric lighting, 8k octane beautifully detailed render, post-processing, highly detailed, intricate complexity, epic composition, magical atmosphere, cinematic lighting + masterpiece, trending on artstation"
 castle = "a medieval fortress overlooking a cliff with a glowing night sky from an upward angle, party of orcs standing guard, style arcane tv series, style of Harry Potter, trending on art station"
 castle_goth = "A epic fantasy portrait of a cute goth woman, castle setting, horror movie lightning, intricate, elegant, highly detailed, digital painting, artstation, concept art, matte, sharp focus, illustration, art by Artgerm and Greg Rutkowski and Alphonse Mucha"
-image = pipe(castle, height=512, width=512, generator=generator, num_inference_steps=50).images[0]
 
-image.save("../data/comic_dnd_2/party_20.png")
+dragon = "A dragon is a reptilian legendary creature that appears in the folklore of many cultures worldwide. Beliefs about dragons vary considerably through regions, but dragons in western cultures since the High Middle Ages have often been depicted as winged, horned, and capable of breathing fire."
+image = pipe(dragon, height=512, width=512, generator=generator, num_inference_steps=50).images[0]
+
+image.save("../dragon.png")
