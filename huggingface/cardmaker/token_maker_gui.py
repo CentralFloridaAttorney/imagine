@@ -148,13 +148,15 @@ class TokenMakerGUI:
         self.update_item_data()
 
     def open_token_window(self):
-        token_maker = TokenMaker(_image_file_path=self.image_file_path["text"],
-                               _name=self.name.get(),
-                               _type=self.collection_name.get(),
-                               _quantity=self.quantity.get(),
-                               _equivalents=self.equivalents.get(),
-                               _description=self.description.get("1.0", END),
-                               _output_file_path=self.card_file_path)
+        # token_maker = TokenMaker(_image_file_path=self.image_file_path["text"],
+        #                        _name=self.name.get(),
+        #                        _type=self.collection_name.get(),
+        #                        _quantity=self.quantity.get(),
+        #                        _equivalents=self.equivalents.get(),
+        #                        _description=self.description.get("1.0", END),
+        #                        _output_file_path=self.card_file_path)
+
+        token_maker = TokenMaker(_image_file_path=self.image_file_path)
         token_maker.open_card_window(self.master)
 
     def generate_image(self):
@@ -338,7 +340,6 @@ class TokenMakerGUI:
         self.card_image_panel.configure(image=self.card_photo)
         self.card_image_panel.image = self.card_photo
         print("update_card_image done!")
-
     def update_coin_image(self, _image_path):
         try:
             self.img = Image.open(_image_path)

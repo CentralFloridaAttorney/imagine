@@ -6,7 +6,7 @@ BASE_PATH = "../../data/"
 TOKEN_BACKGROUND_PATH = BASE_PATH + "dnd/templates/tokens/token-yellow-edge-1.png"
 
 FONT_TYPE = ImageFont.truetype(BASE_PATH + "ttf/arial.ttf", 36)
-IMAGE_FILE_PATH_1 = BASE_PATH + "dnd/templates/tokens/token_plus_1.png"
+IMAGE_FILE_PATH_1 = BASE_PATH + "png/rations-emergancy-1_enhanced_token.png"
 IMAGE_FILE_PATH_2 = BASE_PATH + "dnd/templates/tokens/token_plus_2.png"
 IMAGE_FILE_PATH_3 = BASE_PATH + "dnd/templates/tokens/token_plus_3.png"
 IMAGE_FILE_PATH_4 = BASE_PATH + "dnd/templates/tokens/token_plus_4.png"
@@ -18,7 +18,7 @@ IMAGE_FILE_PATH_5 = BASE_PATH + "dnd/templates/tokens/token_plus_5.png"
 
 "copper-1_536_688_1827.png"
 DEFAULT_COIN_DATA_XLS_PATH = BASE_PATH + "xls/official_coin_data.xls"
-COIN_FILE_PATH_0 = BASE_PATH + "dnd/coins/cp/copper-1_536_688_1827.png"
+COIN_FILE_PATH_0 = BASE_PATH + "png/rations-emergancy-1_enhanced_token.png"
 COIN_FILE_PATH_1 = BASE_PATH + "dnd/coins/cp/copper-5_536_688_111_card.png"
 COIN_FILE_PATH_2 = BASE_PATH + "dnd/coins/sp/silver-1_536_688_1827.png"
 COIN_FILE_PATH_3 = BASE_PATH + "dnd/templates/tokens/token_plus_4.png"
@@ -30,7 +30,7 @@ COIN_FILE_PATH_8 = BASE_PATH + "dnd/coins/pp/platinum-1_536_688_249.png"
 COIN_FILE_PATH_9 = BASE_PATH + "dnd/coins/pp/platinum-25_536_688_148.png"
 
 TOKEN_SHEET_BLANK_FILE_PATH = BASE_PATH + "dnd/templates/token_sheet_blank.png"
-DEFAULT_OUTPUT_PATH = BASE_PATH + "dnd/templates/plus_counters.png"
+DEFAULT_OUTPUT_PATH = BASE_PATH + "png/rations-emergency-1_enhanced_token.png"
 FOREGROUND = (0, 0, 0, 255)
 
 MAX_WIDTH = 2432

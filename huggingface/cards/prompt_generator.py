@@ -3,6 +3,8 @@ import re
 import tkinter as tk
 from transformers import pipeline, set_seed
 
+from huggingface.cardmaker.card_image_prompt_generator import gpt2_pipe, line
+
 
 class PromptGenerator:
     def __init__(self):
@@ -11,7 +13,7 @@ class PromptGenerator:
             line = f.readlines()
 
 
-def generate(_starting_text="A large mound of dirt.", _tk_root=None):
+def generate(_starting_text="an Amazon Blimp flying over snow capped mountains, highly detailed, smooth, sharp focus, bokeh, photography –s 625 –q 2 –iw", _tk_root=None):
     starting_text = _starting_text.replace("\n", " ")
     seed = random.randint(100, 1000000)
     set_seed(seed)
@@ -44,4 +46,10 @@ for x in range(8):
 
 print("done!")
 
+def main():
+    responses = generate("A picture of jesus eating food with people on a snow covered mountain")
+    print("done")
 
+
+if __name__ == "__main__":
+    main()

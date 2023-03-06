@@ -89,9 +89,9 @@ class ImageGenerator:
         new_window.mainloop()
 
 def main():
-    prompt = "photograph of a real life steampunk skeleton warrior, steampunk, cogs, brass, leather, steam power, metal fingers"
-    collection_name = "dnd/monsters/skeletons"
-    file_name = "skeleton-warrior-1"
+    prompt = "'A picture of jesus eating food with people on a snow covered mountain in the snow, high quality, highly detailed, high coherence, anatomically correct, William-Adolphe Bouguereau, golden ratio, concept art, sharp focus, 4k, trending on artstation"
+    collection_name = "dnd/actions/banquet"
+    file_name = "banquet-1"
     card_image_generator = ImageGenerator(_prompt=prompt, _collection_name=collection_name, _file_name=file_name)
     image_path = card_image_generator.get_image(_iterations=20, _style=143, _seed=333)
     print("image path: " + image_path)
