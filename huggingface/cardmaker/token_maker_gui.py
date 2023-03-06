@@ -21,25 +21,6 @@ COLLECTION_NAME = "dnd/"
 
 
 class TokenMakerGUI:
-
-    def update_item_data(self):
-        # quantity, name, weight, image_path
-        self.ITEM_DATA.iloc[int(self.index.get()), 0] = str(self.name.get())
-        self.ITEM_DATA.iloc[int(self.index.get()), 1] = str(self.file_name.get())
-        self.ITEM_DATA.iloc[int(self.index.get()), 2] = str(self.collection_name.get())
-        self.ITEM_DATA.iloc[int(self.index.get()), 3] = str(self.quantity.get())
-        self.ITEM_DATA.iloc[int(self.index.get()), 4] = str(self.description.get("1.0", END).replace("\n", ""))
-        self.ITEM_DATA.iloc[int(self.index.get()), 5] = str(self.equivalents.get())
-        self.ITEM_DATA.iloc[int(self.index.get()), 6] = str(self.prompt.get("1.0", END).replace("\n", ""))
-        self.ITEM_DATA.iloc[int(self.index.get()), 7] = self.image_file_path["text"]
-        self.save_xls()
-
-    def update_image_gui(self):
-        self.update_coin_image(self.image_file_path["text"])
-        self.update_card_image()
-
-    def update_xls(self, event):
-        self.update_item_data()
     def __init__(self, master):
         # self.prompt_generator = PromptGenerator()
         self.xls_project_data = PROJECT_DIR + "xls/official_coin_data.xls"
@@ -143,6 +124,25 @@ class TokenMakerGUI:
         self.master.bind('<Return>', self.update_xls)
         self.update_data_gui()
 
+    def update_item_data(self):
+        # quantity, name, weight, image_path
+        self.ITEM_DATA.iloc[int(self.index.get()), 0] = str(self.name.get())
+        self.ITEM_DATA.iloc[int(self.index.get()), 1] = str(self.file_name.get())
+        self.ITEM_DATA.iloc[int(self.index.get()), 2] = str(self.collection_name.get())
+        self.ITEM_DATA.iloc[int(self.index.get()), 3] = str(self.quantity.get())
+        self.ITEM_DATA.iloc[int(self.index.get()), 4] = str(self.description.get("1.0", END).replace("\n", ""))
+        self.ITEM_DATA.iloc[int(self.index.get()), 5] = str(self.equivalents.get())
+        self.ITEM_DATA.iloc[int(self.index.get()), 6] = str(self.prompt.get("1.0", END).replace("\n", ""))
+        self.ITEM_DATA.iloc[int(self.index.get()), 7] = self.image_file_path["text"]
+        self.save_xls()
+
+    def update_image_gui(self):
+        self.update_coin_image(self.image_file_path["text"])
+        self.update_card_image()
+
+    def update_xls(self, event):
+        self.update_item_data()
+
     def open_token_window(self):
         token_maker = TokenMaker(_image_file_path=self.image_file_path["text"],
                                _name=self.name.get(),
@@ -202,13 +202,10 @@ class TokenMakerGUI:
 
     def open_image_window(self):
         new_window = tkinter.Toplevel(self.master)
-
-        # sets the title of the
-        # Toplevel widget
+        index = int(self.index.get())
+        image_path = self.ITEM_DATA.iloc[index, 3]
         new_window.title(str(self.name.get()))
-
-        # sets the geometry of toplevel
-        img = Image.open(self.image_file_path["text"])
+        img = Image.open(image_path)
         coin_photo = ImageTk.PhotoImage(img)
         coin_image_panel = Label(new_window, image=coin_photo)
         coin_image_panel.image = coin_photo
@@ -318,18 +315,18 @@ class TokenMakerGUI:
         self.name.delete(0, END)
         self.name.insert(0, self.ITEM_DATA.iloc[int(self.index.get()), 0])
         self.file_name.delete(0, END)
-        self.file_name.insert(0, self.ITEM_DATA.iloc[int(self.index.get()), 1])
+        self.file_name.insert(0, self.ITEM_DATA.iloc[int(self.index.get()), 3])
         self.collection_name.delete(0, END)
         self.collection_name.insert(0, self.ITEM_DATA.iloc[int(self.index.get()), 2])
         self.quantity.delete(0, END)
-        self.quantity.insert(0, self.ITEM_DATA.iloc[int(self.index.get()), 3])
+        self.quantity.insert(0, self.ITEM_DATA.iloc[int(self.index.get()), 2])
         self.description.delete('1.0', END)
         self.description.insert('1.0', self.ITEM_DATA.iloc[int(self.index.get()), 4])
         self.equivalents.delete(0, END)
         self.equivalents.insert(0, self.ITEM_DATA.iloc[int(self.index.get()), 5])
         self.prompt.delete('1.0', END)
         self.prompt.insert('1.0', self.ITEM_DATA.iloc[int(self.index.get()), 6])
-        self.image_file_path["text"] = self.ITEM_DATA.iloc[int(self.index.get()), 7]
+        self.image_file_path["text"] = self.ITEM_DATA.iloc[int(self.index.get()), 3]
 
     def update_card_image(self):
         self.card_img = self.make_card()
