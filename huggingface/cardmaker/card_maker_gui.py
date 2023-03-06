@@ -4,7 +4,7 @@ from tkinter import filedialog, Label, Entry, Menu, Text, Button, END
 import pandas
 
 from card_maker import Cardmaker, TokenMaker
-from card_image_generator import CardImageGenerator
+from card_image_generator import ImageGenerator
 import card_image_prompt_generator
 
 # from PIL import Image, ImageFont, ImageTk
@@ -136,7 +136,7 @@ class CardMakerGUI:
 
         collection_name = COLLECTION_NAME + str(self.collection_name.get())
         image_prompt = self.prompt.get("1.0", END) + ", bokeh, photography –s 625 –q 2 –iw"
-        item_image_generator = CardImageGenerator(
+        item_image_generator = ImageGenerator(
             _prompt=image_prompt,
             _collection_name=collection_name,
             _file_name=self.file_name.get(), )

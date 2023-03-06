@@ -4,10 +4,14 @@ from tkinter import filedialog, Label, Entry, Menu, Text, Button, END
 import pandas
 from PIL import Image, ImageTk
 
-from card_maker import Cardmaker, TokenMaker
-from card_image_generator import CardImageGenerator
+from card_maker import Cardmaker
+from token_maker import TokenMaker
 import card_image_prompt_generator
-
+from huggingface.cardmaker.image_generator import ImageGenerator
+COL_NAME = 0
+COL_WEIGHT = 1
+COL_QUANTITY = 2
+COL_IMAGE_PATH = 3
 # from PIL import Image, ImageFont, ImageTk
 
 
@@ -15,7 +19,7 @@ import card_image_prompt_generator
 PROJECT_DIR = "../../data/"
 # COIN_DATA = pandas.read_excel("../data/xls/coin_data.xls")
 # DEFAULT_IMAGE = "./background.png"
-DEFAULT_IMAGE_PATH = PROJECT_DIR + "dnd/coins/cp/copper-1_536_688_543.png"
+DEFAULT_IMAGE_PATH = PROJECT_DIR + "dnd/monsters/skeletons/skeleton-warrior-1_536_688_143_333.png"
 COLLECTION_NAME = "dnd/"
 # FONT_TYPE = ImageFont.truetype("../data/ttf/arial.ttf", 24)
 
@@ -138,7 +142,7 @@ class TokenMakerGUI:
 
     def update_image_gui(self):
         self.update_coin_image(self.image_file_path["text"])
-        self.update_card_image()
+        # self.update_card_image()
 
     def update_xls(self, event):
         self.update_item_data()
@@ -157,7 +161,7 @@ class TokenMakerGUI:
 
         collection_name = COLLECTION_NAME + str(self.collection_name.get())
         image_prompt = self.prompt.get("1.0", END) + ", bokeh, photography –s 625 –q 2 –iw"
-        item_image_generator = CardImageGenerator(
+        item_image_generator = ImageGenerator(
             _prompt=image_prompt,
             _collection_name=collection_name,
             _file_name=self.file_name.get(), )
@@ -273,7 +277,7 @@ class TokenMakerGUI:
         return token_image
 
     def open_image(self):
-        file_path = filedialog.askopenfilename(filetypes=[('image files', '.png')], initialdir="../" + PROJECT_DIR)
+        file_path = filedialog.askopenfilename(filetypes=[('image files', '.png')], initialdir=PROJECT_DIR)
         p = file_path.split('/')
         counter = 0
         while True:
