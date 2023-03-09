@@ -4,9 +4,7 @@ from tkinter import filedialog, Label, Entry, Menu, Text, Button, END
 import pandas
 from PIL import Image, ImageTk
 
-from card_maker import Cardmaker
 from token_maker import TokenMaker
-import card_image_prompt_generator
 from huggingface.cardmaker.image_generator import ImageGenerator
 COL_NAME = 0
 COL_WEIGHT = 1
@@ -48,18 +46,14 @@ class TokenMakerGUI:
         self.btn_show_image.grid(row=1, column=0, rowspan=1, padx=5, pady=5)
         self.open_file_button = Button(self.root, text="Open Item Image", command=self.open_image)
         self.open_file_button.grid(row=1, column=1, rowspan=1, padx=5, pady=5)
-        self.btn_make_card = Button(self.root, text='Make Card', command=self.open_card_window)
-        self.btn_make_card.grid(row=1, column=2, rowspan=1, padx=5, pady=5)
-        self.btn_make_token = Button(self.root, text='Make Token', command=self.open_token_window)
+        self.btn_make_token = Button(self.root, text='Make Token', command=self.make_token)
         self.btn_make_token.grid(row=1, column=3, rowspan=1, padx=5, pady=5)
         self.load_xls_btn = Button(self.root, text="Load XLS", command=self.load_xls)
         self.load_xls_btn.grid(row=2, column=0, rowspan=1, padx=5, pady=5)
         self.generate_image_btn = Button(self.root, text="Generate Image", command=self.generate_image)
         self.generate_image_btn.grid(row=2, column=1, rowspan=1, padx=5, pady=5)
-        self.copy_last_card_btn = Button(self.root, text="Copy Current", command=self.new_card)
+        self.copy_last_card_btn = Button(self.root, text="Copy Current", command=self.copy_token)
         self.copy_last_card_btn.grid(row=2, column=2, rowspan=1, padx=5, pady=5)
-        self.generate_prompts_btn = Button(self.root, text="Generate Prompt", command=self.open_prompts_window)
-        self.generate_prompts_btn.grid(row=2, column=3, rowspan=1, padx=5, pady=5)
         # Data Fields
         iterations_label = Label(self.root, text="Iterations: ")
         iterations_label.grid(row=14, column=0, rowspan=1, padx=5, pady=5)
@@ -89,7 +83,7 @@ class TokenMakerGUI:
 
         # Create the dropdown menu
         self.filemenu = Menu(self.menubar)
-        self.filemenu.add_command(label='New Card', command=self.new_card)
+        self.filemenu.add_command(label='New Card', command=self.copy_token)
         self.filemenu.add_command(label='Cut', command=lambda: root.focus_get().event_generate("<<Cut>>"))
         self.filemenu.add_command(label='Copy', command=lambda: root.focus_get().event_generate("<<Copy>>"))
         self.filemenu.add_command(label='Paste', command=lambda: root.focus_get().event_generate("<<Paste>>"))
@@ -148,7 +142,7 @@ class TokenMakerGUI:
     def update_xls(self, event):
         self.update_item_data()
 
-    def open_token_window(self):
+    def make_token(self):
         # token_maker = TokenMaker(_image_file_path=self.image_file_path["text"],
         #                        _name=self.name.get(),
         #                        _type=self.collection_name.get(),
@@ -179,33 +173,6 @@ class TokenMakerGUI:
         # self.save_xls()
         # self.update_coin_image(item_image_file_path)
 
-    def open_prompts_window(self):
-
-        # Toplevel object which will
-        # be treated as a new window
-        # new_window = tk.Toplevel(self.master)
-        current_prompt = self.prompt.get("1.0", END)
-        prompt_list = card_image_prompt_generator.generate(current_prompt, self.root)
-        # prompt_string = ""
-        # for row in range(0, len(prompt_list), 1):
-        #     prompt_string += prompt_list[row] + " *** "
-        #
-        # revised_prompt_label = Text(new_window, font=('Helvetica bold', 40))
-        # revised_prompt_label.insert("1.0", prompt_string)
-        # revised_prompt_label.pack()
-        #
-        # new_window.mainloop()
-
-    def open_card_window(self):
-        card_maker = Cardmaker(_image_file_path=self.image_file_path["text"],
-                               _name=self.name.get(),
-                               _type=self.collection_name.get(),
-                               _quantity=self.quantity.get(),
-                               _equivalents=self.equivalents.get(),
-                               _description=self.description.get("1.0", END),
-                               _output_file_path=self.card_file_path)
-        card_maker.open_card_window(self.root)
-        print("open_card_window done!")
 
     def open_image_window(self):
         new_window = tkinter.Toplevel(self.root)
@@ -218,7 +185,7 @@ class TokenMakerGUI:
         coin_image_panel.pack()
         new_window.mainloop()
 
-    def new_card(self):
+    def copy_token(self):
         current_row = int(self.index.get())
         data_frame = self.ITEM_DATA.loc[current_row]
         new_row = data_frame.copy().transpose()
@@ -254,18 +221,6 @@ class TokenMakerGUI:
 
     def save_xls(self):
         self.ITEM_DATA.to_excel(XLS_FILE_PATH, index=False)
-
-    def get_card_image(self):
-        card_maker = Cardmaker(_image_file_path=self.image_file_path["text"],
-                               _name=self.name.get(),
-                               _type=self.collection_name.get(),
-                               _quantity=self.quantity.get(),
-                               _equivalents=self.equivalents.get(),
-                               _description=self.description.get("1.0", END),
-                               _output_file_path=self.card_file_path)
-        card_image = card_maker.get_card()
-        print("make_card done!")
-        return card_image
 
     def get_token_image(self):
         token_maker = TokenMaker(_image_file_path=self.image_file_path["text"],
