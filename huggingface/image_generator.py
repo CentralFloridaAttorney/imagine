@@ -8,7 +8,7 @@ from diffusers import StableDiffusionPipeline
 import tkinter as tk
 
 class ImageGenerator:
-    def __init__(self, _prompt="A copper coin.", _collection_name="dnd/coins/cp", _file_name="copper-1", _height=536, _width=688, _prompt_strength=.8):
+    def __init__(self, _prompt="A copper coin.", _collection_name="dnd/coins/cp", _file_name="copper-1", _height=480, _width=640, _prompt_strength=.8):
         """
         The __init__ function is called when an instance of the class is created.
         It initializes variables that are unique to each instance, such as the prompt
@@ -24,12 +24,12 @@ class ImageGenerator:
         :return: The following:
         :doc-author: Trelent
         """
-        self.BASE_DIR = "../../data/"
+        self.BASE_DIR = "../data/"
         self.COLLECTION_NAME = _collection_name
         self.PROMPT = _prompt
         self.file_name = _file_name
         # self.GENERATOR = torch.Generator(device="cpu").manual_seed(1096)
-        self.styles = pandas.read_csv("../../data/txt/artist_styles")
+        self.styles = pandas.read_csv("../data/txt/artist_styles")
         self.styles = self.styles.fillna("professional")
         self.rnd_style = random.randint(0, len(self.styles))
         model_id = "CompVis/stable-diffusion-v1-4"
@@ -89,9 +89,9 @@ class ImageGenerator:
         new_window.mainloop()
 
 def main():
-    prompt = "'A picture of jesus eating food with people on a snow covered mountain in the snow, high quality, highly detailed, high coherence, anatomically correct, William-Adolphe Bouguereau, golden ratio, concept art, sharp focus, 4k, trending on artstation"
-    collection_name = "dnd/actions/banquet"
-    file_name = "banquet-1"
+    prompt = "Photograph of an antique Copper Coin, golden ratio, concept art, sharp focus, 4k, trending on artstation"
+    collection_name = "dnd/coins/cp"
+    file_name = "copper-antique-1"
     card_image_generator = ImageGenerator(_prompt=prompt, _collection_name=collection_name, _file_name=file_name)
     image_path = card_image_generator.get_image(_iterations=20, _style=143, _seed=333)
     print("image path: " + image_path)
