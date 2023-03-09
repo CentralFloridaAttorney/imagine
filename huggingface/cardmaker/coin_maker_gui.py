@@ -25,7 +25,7 @@ XLS_FILE_PATH = PROJECT_DIR + "xls/official_coin_data.xls"
 # FONT_TYPE = ImageFont.truetype("../data/ttf/arial.ttf", 24)
 
 
-class TokenMakerGUI:
+class CoinMakerGUI:
     def __init__(self, master):
         # self.prompt_generator = PromptGenerator()
         self.xls_project_data = PROJECT_DIR + "xls/official_coin_data.xls"
@@ -48,12 +48,12 @@ class TokenMakerGUI:
         self.btn_show_image.grid(row=1, column=0, rowspan=1, padx=5, pady=5)
         self.open_file_button = Button(self.root, text="Open Item Image", command=self.open_image)
         self.open_file_button.grid(row=1, column=1, rowspan=1, padx=5, pady=5)
-        self.btn_make_card = Button(self.root, text='Make Card', command=self.open_card_window)
-        self.btn_make_card.grid(row=1, column=2, rowspan=1, padx=5, pady=5)
+        # self.btn_make_card = Button(self.root, text='Make Card', command=self.open_card_window)
+        # self.btn_make_card.grid(row=1, column=2, rowspan=1, padx=5, pady=5)
         self.btn_make_token = Button(self.root, text='Make Token', command=self.open_token_window)
         self.btn_make_token.grid(row=1, column=3, rowspan=1, padx=5, pady=5)
-        self.load_xls_btn = Button(self.root, text="Load XLS", command=self.load_xls)
-        self.load_xls_btn.grid(row=2, column=0, rowspan=1, padx=5, pady=5)
+        # self.load_xls_btn = Button(self.root, text="Load XLS", command=self.load_xls)
+        # self.load_xls_btn.grid(row=2, column=0, rowspan=1, padx=5, pady=5)
         self.generate_image_btn = Button(self.root, text="Generate Image", command=self.generate_image)
         self.generate_image_btn.grid(row=2, column=1, rowspan=1, padx=5, pady=5)
         self.copy_last_card_btn = Button(self.root, text="Copy Current", command=self.new_card)
@@ -355,5 +355,5 @@ class TokenMakerGUI:
 
 
 root = tkinter.Tk()
-TokenMakerGUI(root)
+CoinMakerGUI(root)
 root.mainloop()
