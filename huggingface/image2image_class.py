@@ -37,10 +37,12 @@ class Img2Img:
         prompt = "an antique copper coin on a wooden table, bokeh, photography –s 625 –q 2 –iw"
         gandalf_prompt = "ultrarealistic, (old Bilbo Baggins with evil eyes, Lord of the Rings), dramatic lighting, award winning photo, no color, 80mm lense –beta –upbeta –upbeta"
 
+
+    def get_enhanced_image(self):
         image = self.pipe(prompt=self.prompt, image=self.template_img, strength=.9, guidance_scale=.1).images[0]
         time.sleep(1)
         image.save(self.NEW_FILE_PATH)
-
+        return image
 
 def main():
     prompt = "a copper coin on a wooden table, concept art, 8k"

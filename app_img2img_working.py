@@ -2,7 +2,6 @@ import os
 
 import cv2
 import numpy as np
-import pkg_resources
 import streamlit as st
 from PIL import Image
 from diffusers import StableDiffusionImg2ImgPipeline
@@ -12,7 +11,7 @@ from huggingface.image2image_class import Img2Img
 IMAGE_DIMENSIONS = (512, 512)
 DEFAULT_COLOR = (128, 128, 255)
 MODEL_ID = "CompVis/stable-diffusion-v1-4"
-BASE_PATH = os.path.dirname(__file__).rstrip("huggingface/tokenmaker")+"/imagine/"
+BASE_PATH = os.path.dirname(__file__).rstrip("huggingface/tokenmaker") + "/imagine/"
 
 
 @st.cache_resource
@@ -22,12 +21,12 @@ def get_pipe():
     pipe.safety_checker = lambda images, clip_input: (images, False)
     return pipe
 
+
 def image2image():
-    prompt = st.session_state.text_input
-    template_image = st.session_state.template_image
-    image2image = Img2Img(_pipe=get_pipe(), _prompt=st.session_state.text_input,
-                          _template_img=template_image,
-                          _new_file_path="./enhanced_image.png")
+    img2img = Img2Img(_pipe=get_pipe(), _prompt=st.session_state.text_input,
+                      _template_img=st.session_state.template_image,
+                      _new_file_path="./enhanced_image.png")
+    st.image(img2img.get_enhanced_image())
 
 
 uploaded_file = st.file_uploader("Choose an image for the template", type="png")
