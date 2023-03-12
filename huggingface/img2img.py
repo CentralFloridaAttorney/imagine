@@ -48,10 +48,11 @@ def main():
     prompt = "a copper coin on a wooden table, concept art, 8k"
     output_path = "data/dnd/coins/cp/copper-1-coin_enhanced.png"
     image = Image.open(BASE_PATH+"data/dnd/coins/cp/copper-1-coin.png")
-    image2image = Img2Img(_template_img=image,
+    img2img = Img2Img(_template_img=image,
                           _new_file_path=output_path,
                           _prompt=prompt)
-
+    image = img2img.get_enhanced_image()
+    image.save("./img2img_xyzzy.png")
 
 if __name__ == "__main__":
     main()

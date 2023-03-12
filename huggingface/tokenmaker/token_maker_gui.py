@@ -3,9 +3,10 @@ from tkinter import filedialog, Label, Entry, Menu, Text, Button, END
 
 import pandas
 from PIL import Image, ImageTk
+from huggingface.cardmaker.image_generator import ImageGenerator
 
 from token_maker import TokenMaker
-from huggingface.cardmaker.image_generator import ImageGenerator
+
 COL_NAME = 0
 COL_WEIGHT = 1
 COL_QUANTITY = 2
@@ -20,6 +21,8 @@ PROJECT_DIR = "../../data/"
 DEFAULT_IMAGE_PATH = PROJECT_DIR + "dnd/monsters/skeletons/skeleton-warrior-1_536_688_143_333.png"
 COLLECTION_NAME = "dnd/"
 XLS_FILE_PATH = PROJECT_DIR + "xls/official_coin_data.xls"
+
+
 # FONT_TYPE = ImageFont.truetype("../data/ttf/arial.ttf", 24)
 
 
@@ -173,7 +176,6 @@ class TokenMakerGUI:
         # self.save_xls()
         # self.update_coin_image(item_image_file_path)
 
-
     def open_image_window(self):
         new_window = tkinter.Toplevel(self.root)
         image_path = self.ITEM_DATA.iloc[int(self.index.get()), COL_IMAGE_PATH]
@@ -224,7 +226,7 @@ class TokenMakerGUI:
 
     def get_token_image(self):
         token_maker = TokenMaker(_image_file_path=self.image_file_path["text"],
-                                 _name=self.name.get(),
+                                 _top_text=self.name.get(),
                                  _type=self.collection_name.get(),
                                  _quantity=self.quantity.get(),
                                  _equivalents=self.equivalents.get(),
@@ -297,6 +299,7 @@ class TokenMakerGUI:
         self.card_image_panel.configure(image=self.card_photo)
         self.card_image_panel.image = self.card_photo
         print("update_card_image done!")
+
     def update_coin_image(self, _image_path):
         try:
             self.img = Image.open(_image_path)
@@ -306,7 +309,6 @@ class TokenMakerGUI:
         except FileNotFoundError:
             self.open_image()
             self.update_image_gui()
-
 
 
 root = tkinter.Tk()

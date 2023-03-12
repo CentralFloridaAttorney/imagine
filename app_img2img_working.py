@@ -6,7 +6,7 @@ import streamlit as st
 from PIL import Image
 from diffusers import StableDiffusionImg2ImgPipeline
 
-from huggingface.image2image_class import Img2Img
+from huggingface.img2img import Img2Img
 
 IMAGE_DIMENSIONS = (512, 512)
 DEFAULT_COLOR = (128, 128, 255)

@@ -82,7 +82,7 @@ def test_get_values(_user):
 if __name__ == '__main__':
     _user = 'xyzzy!'
     test_init(_user)
-    test_write_default_configs(_user)
-    test_get_configs(_user)
-    test_get_values(_user)
+    # test_write_default_configs(_user)
+    # test_get_configs(_user)
+    # test_get_values(_user)
     print("config_demo done!")

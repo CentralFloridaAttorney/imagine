@@ -5,9 +5,10 @@ import pandas
 from PIL import Image, ImageTk
 
 from card_maker import Cardmaker
-from token_maker import TokenMaker
 import card_image_prompt_generator
-from huggingface.cardmaker.image_generator import ImageGenerator
+from huggingface.image_generator import ImageGenerator
+from huggingface.tokenmaker.token_maker import TokenMaker
+
 COL_NAME = 0
 COL_WEIGHT = 1
 COL_QUANTITY = 2
@@ -269,7 +270,7 @@ class CoinMakerGUI:
 
     def get_token_image(self):
         token_maker = TokenMaker(_image_file_path=self.image_file_path["text"],
-                                 _name=self.name.get(),
+                                 _top_text=self.name.get(),
                                  _type=self.collection_name.get(),
                                  _quantity=self.quantity.get(),
                                  _equivalents=self.equivalents.get(),
