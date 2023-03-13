@@ -36,7 +36,7 @@ class ImageGenerator:
         # model_id = "volrath50/fantasy-card-diffusion"
         device = "cpu"
         self.pipe = StableDiffusionPipeline.from_pretrained(model_id)
-        self.pipe.safety_checker = lambda images, clip_input: (images, False)
+        # self.pipe.safety_checker = lambda images, clip_input: (images, False)
         self.pipe = self.pipe.to(device)
 
         # STYLE_LIST = [26, 29, 1267, 313, 940]
@@ -96,5 +96,23 @@ def main():
     image_path = card_image_generator.get_image(_iterations=20, _style=143, _seed=333)
     print("image path: " + image_path)
 
+
+def test_wizard():
+    dog_prompt = "a cute magical flying dog, fantasy art drawn by disney concept artists, golden colour, high quality, highly detailed, elegant, sharp focus, concept art, character concepts, digital painting, mystery, adventure"
+    superhero_prompt = "clear portrait of a superhero concept between spiderman and batman, cottagecore!!, background hyper detailed, character concept, full body, dynamic pose, intricate, highly detailed, digital painting, artstation, concept art, smooth, sharp focus, illustration, art by artgerm and greg rutkowski and alphonse mucha"
+    priest = "priest, blue robes, 68 year old man, national geographic, portrait, photo, photography –s 625 –q 2 –iw 3"
+    barbarian = "barbarian half-orc, realistic green skin, battle axe, national geographic, portrait, photo, photography –s 625 –q 2 –iw 3"
+
+    prompt = "Environment castle nathria in world of warcraft ::gothic style fully developed castle :cinematic, raining, night time, detailed, epic , concept art, Matte painting, shafts of lighting, mist, photorealistic, concept art, volumetric light, cinematic epic + rule of thirds, movie concept art, 8k, cinematic, trending on artstation, movie concept art, cinematic composition , ultra detailed, realistic , hyper realistic , volumetric lighting , 8k –ar 3:1"
+    
+    new_bard = "male halfling bard, scar on face,paying a guitar, in a field , national geographic, portrait, photo, photography –s 625 –q 2 –iw 3"
+    collection_name = "dnd/monsters"
+    file_name = "new-bard-1"
+    card_image_generator = ImageGenerator(_prompt=new_bard, _collection_name=collection_name, _file_name=file_name)
+    image_path = card_image_generator.get_image(_iterations=20, _style=245, _seed=639)
+    print("image path: " + image_path)
+
+
 if __name__ == "__main__":
-    main()
+    # main()
+    test_wizard()

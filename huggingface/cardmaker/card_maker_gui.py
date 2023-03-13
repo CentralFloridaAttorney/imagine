@@ -4,8 +4,8 @@ from tkinter import filedialog, Label, Entry, Menu, Text, Button, END
 import pandas
 
 from card_maker import Cardmaker, TokenMaker
-from card_image_generator import ImageGenerator
 import card_image_prompt_generator
+from huggingface.image_generator import ImageGenerator
 
 # from PIL import Image, ImageFont, ImageTk
 

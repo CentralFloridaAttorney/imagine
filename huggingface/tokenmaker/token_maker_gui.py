@@ -3,8 +3,8 @@ from tkinter import filedialog, Label, Entry, Menu, Text, Button, END
 
 import pandas
 from PIL import Image, ImageTk
-from huggingface.cardmaker.image_generator import ImageGenerator
 
+from huggingface.image_generator import ImageGenerator
 from token_maker import TokenMaker
 
 COL_NAME = 0
